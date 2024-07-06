@@ -13,6 +13,8 @@
     </head>
     <body>
         {% if app.user %}
+            Welcome {{ app.user.name }}
+            <a href="{{ path('app_cart') }}">Cart</a>
             <a href="{{ path('app_logout') }}">Logout</a>
         {% endif %}
 

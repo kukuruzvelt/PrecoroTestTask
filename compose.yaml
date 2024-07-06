@@ -23,6 +23,5 @@ services:
           "--innodb_initialized"
         ]
 
-
 volumes:
   db_data:
