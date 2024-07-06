@@ -12,6 +12,10 @@
         {% endblock %}
     </head>
     <body>
+        {% if app.user %}
+            <a href="{{ path('app_logout') }}">Logout</a>
+        {% endif %}
+
         {% block body %}{% endblock %}
     </body>
 </html>

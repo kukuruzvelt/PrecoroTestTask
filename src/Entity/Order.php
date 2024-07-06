@@ -22,10 +22,11 @@ class Order
     private ?string $status = null;
 
     #[ORM\Column]
-    private ?int $userId = null;
-
-    #[ORM\Column]
     private ?int $totalPrice = null;
+
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
     public function getId(): ?int
     {
@@ -56,18 +57,6 @@ class Order
         return $this;
     }
 
-    public function getUserId(): ?int
-    {
-        return $this->userId;
-    }
-
-    public function setUserId(int $userId): static
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
     public function getTotalPrice(): ?int
     {
         return $this->totalPrice;
@@ -76,6 +65,18 @@ class Order
     public function setTotalPrice(int $totalPrice): static
     {
         $this->totalPrice = $totalPrice;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }
