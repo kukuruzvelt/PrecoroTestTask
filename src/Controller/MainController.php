@@ -15,7 +15,7 @@ class MainController extends AbstractController
     {
     }
 
-    #[Route('/', name: 'app_main')]
+    #[Route('/', name: 'app_main', methods: ['GET'])]
     public function index(): Response
     {
         $products = $this->productRepository->findAll();
