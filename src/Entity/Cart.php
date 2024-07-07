@@ -56,24 +56,18 @@ class Cart
         return $this->cartProducts;
     }
 
-    public function addProduct(Product $product, int $amount): static
+    public function addCartProduct(CartProduct $cartProduct): static
     {
-        $cartProduct = $this->getCartProduct($product);
-
-        if ($cartProduct === null) {
-            $cartProduct = $this->createCartProduct($product);
+        if (!$this->cartProducts->contains($cartProduct)) {
             $this->cartProducts->add($cartProduct);
+            $cartProduct->setCart($this);
         }
-
-        $cartProduct->setProductAmount($cartProduct->getProductAmount() + $amount);
 
         return $this;
     }
 
-    public function removeProduct(Product $product): static
+    public function removeCartProduct(CartProduct $cartProduct): static
     {
-        $cartProduct = $this->getCartProduct($product);
-
         if ($this->cartProducts->removeElement($cartProduct)) {
             if ($cartProduct->getCart() === $this) {
                 $cartProduct->setCart(null);
@@ -81,21 +75,5 @@ class Cart
         }
 
         return $this;
-    }
-
-    private function getCartProduct(Product $product): ?CartProduct
-    {
-        $criteria = Criteria::create()->where(Criteria::expr()->eq('product', $product));
-        $cartProducts = $this->cartProducts->matching($criteria);
-
-        return $cartProducts->isEmpty() ? null : $cartProducts->first();
-    }
-
-    private function createCartProduct(Product $product): CartProduct
-    {
-        return (new CartProduct())
-            ->setProduct($product)
-            ->setCart($this)
-            ->setProductAmount(0);
     }
 }

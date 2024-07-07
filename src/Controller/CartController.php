@@ -2,9 +2,8 @@
 
 namespace App\Controller;
 
-use App\Repository\CartRepository;
 use App\Repository\ProductRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\CartService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,8 +15,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class CartController extends AbstractController
 {
     public function __construct(
+        private CartService $cartService,
         private ProductRepository $productRepository,
-        private EntityManagerInterface $entityManager
     )
     {
     }
@@ -39,13 +38,12 @@ class CartController extends AbstractController
         $cart = $this->getUser()->getCart();
         $productId = $request->request->get('productId');
         $amount = $request->request->get('amount');
-
         $product = $this->productRepository->find($productId);
 
-        if($product) {
-            $cart->addProduct($this->productRepository->find($productId), $amount);
-            $this->entityManager->persist($cart);
-            $this->entityManager->flush();
+        if ($product) {
+            $this->cartService->addProduct($cart, $this->productRepository->find($productId), $amount);
+
+            return new Response();
         }
 
         return new Response('Product not found', Response::HTTP_NOT_FOUND);
@@ -58,10 +56,10 @@ class CartController extends AbstractController
         $productId = $request->request->get('productId');
         $product = $this->productRepository->find($productId);
 
-        if($product){
-            $cart->removeProduct($this->productRepository->find($productId));
-            $this->entityManager->persist($cart);
-            $this->entityManager->flush();
+        if ($product) {
+            $this->cartService->removeProduct($cart, $this->productRepository->find($productId));
+
+            return new Response();
         }
 
         return new Response('Product not found', Response::HTTP_NOT_FOUND);
