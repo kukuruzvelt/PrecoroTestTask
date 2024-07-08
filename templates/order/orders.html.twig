@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Orders{% endblock %}
+
+{% block body %}
+    <h1>Your orders</h1>
+    <ul class="order-list">
+        {% for order in orders %}
+            <li class="order-item">
+                <div class="order-header">
+                    <strong>Order ID: {{ order.id }}</strong>
+                    <span class="order-status">{{ order.status }}</span>
+                    <span class="order-date">{{ order.date|date("Y-m-d") }}</span>
+                </div>
+                <ul class="order-products">
+                    {% for orderProduct in order.orderProducts %}
+                        <li class="order-product-item">
+                            <span class="product-name">{{ orderProduct.product.name }}</span>
+                            <span class="product-quantity">x {{ orderProduct.productAmount }}</span>
+                            <span class="product-price">{{ orderProduct.allProductsPrice }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <div class="order-total">Total price: {{ order.totalPrice }}</div>
+            </li>
+        {% else %}
+            <li class="no-orders">No orders.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ path('app_main') }}">Back to main page</a>
+{% endblock %}

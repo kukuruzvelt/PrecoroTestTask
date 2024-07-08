@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cart{% endblock %}
+
+{% block body %}
+    <h1>Your products</h1>
+    <ul>
+        {% for cartProduct in cartProducts %}
+            <li>
+                <strong>{{ cartProduct.product.name }} x {{ cartProduct.productAmount }} </strong>: Each one for {{ cartProduct.product.price }}
+                <form action="{{ path('app_cart_remove') }}" method="post" style="display: inline;">
+                    <input type="hidden" name="productId" value="{{ cartProduct.product.id }}">
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+        {% else %}
+            <li>No products in the cart.</li>
+        {% endfor %}
+    </ul>
+
+    {% if cartProducts|length > 0 %}
+        <form action="{{ path('app_order_create') }}" method="post">
+            <button type="submit">Create order</button>
+        </form>
+    {% endif %}
+
+    <a href="{{ path('app_main') }}">Back to main page</a>
+{% endblock %}
