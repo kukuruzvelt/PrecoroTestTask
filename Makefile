@@ -1,4 +1,5 @@
 start:
+	composer install
 	docker compose up -d
 	./infrastrucutre/wait-for-db.sh
 	bin/console doctrine:migrations:migrate -n

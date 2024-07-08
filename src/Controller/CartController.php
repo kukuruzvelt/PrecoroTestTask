@@ -43,7 +43,7 @@ class CartController extends AbstractController
         if ($product) {
             $this->cartService->addProduct($cart, $this->productRepository->find($productId), $amount);
 
-            return new Response();
+            $this->redirect('app_main');
         }
 
         return new Response('Product not found', Response::HTTP_NOT_FOUND);
@@ -59,7 +59,7 @@ class CartController extends AbstractController
         if ($product) {
             $this->cartService->removeProduct($cart, $this->productRepository->find($productId));
 
-            return new Response();
+            $this->redirect('app_cart');
         }
 
         return new Response('Product not found', Response::HTTP_NOT_FOUND);
